@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phishing Awareness Training — Case File #1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B2330;
+    --ink-2:#262F40;
+    --paper:#F2EEE4;
+    --paper-2:#E8E2D2;
+    --highlighter:#F4D35E;
+    --alert:#C0445C;
+    --teal:#3E7C8A;
+    --text-dark:#23262B;
+    --muted:#6B6F76;
+    --good:#3F7D5C;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'Source Sans 3', sans-serif;
+    line-height:1.55;
+  }
+  .stamp{
+    font-family:'IBM Plex Mono', monospace;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    font-size:.72rem;
+  }
+  h1,h2,h3{
+    font-family:'Source Serif 4', serif;
+    margin:0;
+    color:var(--paper);
+  }
+  a{color:var(--highlighter);}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    max-width:980px;
+    margin:0 auto;
+    padding:76px 28px 56px;
+    text-align:left;
+    border-bottom:1px solid rgba(242,238,228,0.12);
+  }
+  .case-id{
+    display:inline-block;
+    border:1px solid rgba(244,211,94,0.5);
+    color:var(--highlighter);
+    padding:5px 12px;
+    border-radius:2px;
+    margin-bottom:22px;
+  }
+  .hero h1{
+    font-size:clamp(2.2rem, 5vw, 3.4rem);
+    line-height:1.08;
+    font-weight:700;
+    max-width:780px;
+  }
+  .hero p.lede{
+    max-width:620px;
+    color:#C9C4B5;
+    font-size:1.08rem;
+    margin-top:18px;
+  }
+  .hero-meta{
+    display:flex;
+    gap:28px;
+    margin-top:36px;
+    flex-wrap:wrap;
+  }
+  .hero-meta div{
+    border-left:2px solid var(--teal);
+    padding-left:12px;
+  }
+  .hero-meta .stamp{color:#9FB7BD;}
+  .hero-meta .val{font-family:'Source Serif 4',serif; font-size:1.3rem; color:var(--paper);}
+
+  /* ---------- SECTION WRAPPER ---------- */
+  section{
+    max-width:980px;
+    margin:0 auto;
+    padding:64px 28px;
+    border-bottom:1px solid rgba(242,238,228,0.12);
+  }
+  .section-label{
+    color:var(--highlighter);
+    margin-bottom:10px;
+  }
+  section > h2{
+    font-size:1.9rem;
+    margin-bottom:14px;
+    max-width:680px;
+  }
+  section > p.section-intro{
+    color:#C9C4B5;
+    max-width:640px;
+    margin-bottom:36px;
+  }
+
+  /* ---------- TACTICS GRID ---------- */
+  .tactics{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+    gap:16px;
+  }
+  .tactic{
+    background:var(--ink-2);
+    border:1px solid rgba(242,238,228,0.1);
+    border-radius:4px;
+    padding:20px;
+  }
+  .tactic .stamp{color:var(--teal);}
+  .tactic h3{font-size:1.05rem; margin-top:8px; color:var(--paper);}
+  .tactic p{color:#AFAFAF; font-size:.92rem; margin:8px 0 0;}
+
+  /* ---------- EVIDENCE (EMAIL) CARDS ---------- */
+  .evidence-list{display:flex; flex-direction:column; gap:22px;}
+  .evidence{
+    background:var(--paper);
+    color:var(--text-dark);
+    border-radius:6px;
+    overflow:hidden;
+    box-shadow:0 14px 30px rgba(0,0,0,0.35);
+  }
+  .evidence-tab{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:var(--paper-2);
+    padding:10px 18px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:.72rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .email-body{padding:22px 24px 8px;}
+  .email-row{
+    display:flex;
+    gap:10px;
+    font-size:.88rem;
+    padding:4px 0;
+    border-bottom:1px solid rgba(0,0,0,0.06);
+  }
+  .email-row .label{color:var(--muted); width:54px; flex-shrink:0; font-family:'IBM Plex Mono',monospace; font-size:.74rem; padding-top:2px;}
+  .email-row .value{font-weight:600;}
+  .email-row .flagged{
+    background:linear-gradient(120deg, transparent 0%, var(--highlighter) 0%);
+    background-size:100% 100%;
+    cursor:pointer;
+    border-radius:2px;
+    padding:0 3px;
+    transition:background .15s;
+  }
+  .evidence.revealed .email-row .flagged{
+    background:var(--highlighter);
+  }
+  .email-subject{font-family:'Source Serif 4',serif; font-size:1.25rem; margin:14px 0 10px;}
+  .email-message{
+    padding:6px 0 18px;
+    font-size:.95rem;
+    color:#3A3D42;
+  }
+  .email-message .flagged{
+    background:var(--highlighter);
+    border-radius:2px;
+    padding:0 3px;
+    cursor:pointer;
+  }
+  .reveal-btn{
+    display:block;
+    width:100%;
+    background:var(--ink);
+    color:var(--paper);
+    border:none;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:.78rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    padding:14px;
+    cursor:pointer;
+    transition:background .15s;
+  }
+  .reveal-btn:hover{background:var(--teal);}
+  .annotations{
+    display:none;
+    background:#1E2A2D;
+    color:#D9E6E8;
+    padding:18px 24px;
+    font-size:.88rem;
+  }
+  .evidence.revealed .annotations{display:block;}
+  .annotations ul{margin:0; padding-left:18px;}
+  .annotations li{margin-bottom:8px;}
+  .annotations li b{color:var(--highlighter);}
+
+  /* ---------- FIELD MANUAL (CHECKLIST) ---------- */
+  .manual{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:14px;
+  }
+  .manual-item{
+    display:flex;
+    gap:14px;
+    background:var(--ink-2);
+    border-radius:4px;
+    padding:16px 18px;
+    border-left:3px solid var(--good);
+  }
+  .manual-item .num{
+    font-family:'IBM Plex Mono',monospace;
+    color:var(--good);
+    font-weight:600;
+  }
+  .manual-item p{margin:0; color:#D6D2C5; font-size:.93rem;}
+  .manual-item strong{color:var(--paper); display:block; margin-bottom:4px; font-family:'Source Serif 4',serif; font-size:1.05rem;}
+
+  /* ---------- QUIZ ---------- */
+  .quiz-card{
+    background:var(--paper);
+    color:var(--text-dark);
+    border-radius:6px;
+    padding:6px 0 0;
+    overflow:hidden;
+  }
+  #quiz-progress{
+    height:4px;
+    background:var(--paper-2);
+  }
+  #quiz-progress-bar{
+    height:100%;
+    width:0%;
+    background:var(--teal);
+    transition:width .3s;
+  }
+  .quiz-body{padding:30px 30px 26px;}
+  .quiz-q-label{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:.72rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:8px;
+  }
+  .quiz-question{font-family:'Source Serif 4',serif; font-size:1.3rem; margin-bottom:20px;}
+  .quiz-options{display:flex; flex-direction:column; gap:10px;}
+  .quiz-opt{
+    text-align:left;
+    border:1.5px solid #D8D2C2;
+    background:#fff;
+    border-radius:4px;
+    padding:12px 16px;
+    font-size:.95rem;
+    cursor:pointer;
+    color:var(--text-dark);
+    transition:border-color .15s, background .15s;
+  }
+  .quiz-opt:hover{border-color:var(--teal);}
+  .quiz-opt.correct{border-color:var(--good); background:#E8F3EC;}
+  .quiz-opt.incorrect{border-color:var(--alert); background:#F8E9EC;}
+  .quiz-feedback{
+    margin-top:16px;
+    font-size:.92rem;
+    padding:12px 14px;
+    border-radius:4px;
+    background:#EFEAE0;
+    display:none;
+  }
+  .quiz-feedback.show{display:block;}
+  .quiz-next{
+    margin-top:18px;
+    background:var(--ink);
+    color:var(--paper);
+    border:none;
+    font-family:'IBM Plex Mono',monospace;
+    text-transform:uppercase;
+    letter-spacing:.07em;
+    font-size:.78rem;
+    padding:11px 20px;
+    border-radius:3px;
+    cursor:pointer;
+    display:none;
+  }
+  .quiz-next.show{display:inline-block;}
+  .quiz-result{display:none; text-align:center; padding:50px 30px;}
+  .quiz-result.show{display:block;}
+  .quiz-result .score{font-family:'Source Serif 4',serif; font-size:3rem; margin-bottom:6px;}
+  .quiz-result .verdict{
+    font-family:'IBM Plex Mono',monospace;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    font-size:.85rem;
+    padding:6px 14px;
+    border-radius:3px;
+    display:inline-block;
+    margin-bottom:18px;
+  }
+  .quiz-result .verdict.pass{background:#E8F3EC; color:var(--good);}
+  .quiz-result .verdict.fail{background:#F8E9EC; color:var(--alert);}
+  .restart-btn{
+    margin-top:18px;
+    background:none;
+    border:1.5px solid var(--ink);
+    color:var(--ink);
+    font-family:'IBM Plex Mono',monospace;
+    text-transform:uppercase;
+    font-size:.75rem;
+    letter-spacing:.06em;
+    padding:9px 18px;
+    border-radius:3px;
+    cursor:pointer;
+  }
+
+  footer{
+    max-width:980px;
+    margin:0 auto;
+    padding:40px 28px 70px;
+    color:#7C8088;
+    font-size:.85rem;
+    font-family:'IBM Plex Mono',monospace;
+  }
+  footer a{color:#9FB7BD;}
+
+  @media (max-width:600px){
+    .hero{padding:54px 18px 40px;}
+    section{padding:46px 18px;}
+    .email-row{flex-direction:column; gap:2px;}
+    .email-row .label{width:auto;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<div class="hero">
+  <div class="case-id stamp">Case File #1 · Internal Training · CodeAlpha Cyber Security</div>
+  <h1>Most breaches don't start with code.<br>They start with a convincing email.</h1>
+  <p class="lede">90%+ of cyberattacks begin with phishing. This module trains you to read email the way an investigator reads evidence — spotting the inconsistencies attackers hope you'll miss. Work through three sections: the playbook, the evidence, and the field test.</p>
+  <div class="hero-meta">
+    <div><div class="stamp">Reading time</div><div class="val">~12 min</div></div>
+    <div><div class="stamp">Live samples</div><div class="val">4 cases</div></div>
+    <div><div class="stamp">Field test</div><div class="val">5 questions</div></div>
+  </div>
+</div>
+
+<!-- ================= TACTICS ================= -->
+<section id="tactics">
+  <div class="section-label stamp">01 · The Playbook</div>
+  <h2>The four levers attackers pull</h2>
+  <p class="section-intro">Phishing rarely relies on technical exploits — it relies on psychology. Almost every attack leans on one or more of these social-engineering levers.</p>
+  <div class="tactics">
+    <div class="tactic">
+      <div class="stamp">Lever 01</div>
+      <h3>Urgency</h3>
+      <p>"Act within 24 hours or your account will be suspended." Panic shortens the time you spend thinking.</p>
+    </div>
+    <div class="tactic">
+      <div class="stamp">Lever 02</div>
+      <h3>Authority</h3>
+      <p>Impersonating a CEO, IT admin, or bank to borrow their credibility and discourage questioning.</p>
+    </div>
+    <div class="tactic">
+      <div class="stamp">Lever 03</div>
+      <h3>Scarcity / Reward</h3>
+      <p>Fake prizes, refunds, or limited-time offers that trigger impulsive clicks before scrutiny.</p>
+    </div>
+    <div class="tactic">
+      <div class="stamp">Lever 04</div>
+      <h3>Trust Transfer</h3>
+      <p>Spoofing a known brand's logo, tone, and layout so the message inherits trust it didn't earn.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= EVIDENCE: SPOT THE PHISH ================= -->
+<section id="evidence">
+  <div class="section-label stamp">02 · The Evidence</div>
+  <h2>Spot the phish — inspect each exhibit</h2>
+  <p class="section-intro">Below are four real-world-style email samples. Read each one first, then tap <b>"Reveal evidence"</b> to see exactly which details gave it away — highlighted the way an investigator would mark a case file.</p>
+
+  <div class="evidence-list">
+
+    <!-- EXHIBIT A -->
+    <div class="evidence" id="ex-a">
+      <div class="evidence-tab"><span>Exhibit A — Account Suspension</span><span>PHISHING</span></div>
+      <div class="email-body">
+        <div class="email-row"><span class="label">From</span><span class="value flagged" data-note="a1">security@paypa1-alerts.com</span></div>
+        <div class="email-row"><span class="label">To</span><span class="value">you@yourcompany.com</span></div>
+        <div class="email-row"><span class="label">Subject</span><span class="value flagged" data-note="a2">Urgent: Your account will be suspended in 24 hours</span></div>
+        <div class="email-message">
+          Dear Customer,<br><br>
+          We detected unusual activity on your account. <span class="flagged" data-note="a2">You must verify your information within 24 hours</span> or your account will be permanently suspended.<br><br>
+          <span class="flagged" data-note="a3">Click here to verify: http://paypal-secure-login.verify-account.info</span><br><br>
+          Failure to act will result in loss of access to your funds.<br><br>
+          — <span class="flagged" data-note="a4">PayPal Security Teem</span>
+        </div>
+      </div>
+      <button class="reveal-btn" onclick="toggleEvidence('ex-a')">Reveal evidence</button>
+      <div class="annotations">
+        <ul>
+          <li id="a1"><b>Lookalike domain</b> — "paypa1-alerts.com" uses a digit "1" instead of "l", and isn't PayPal's real domain.</li>
+          <li id="a2"><b>Manufactured urgency</b> — a tight, scary deadline is designed to stop you from thinking it through.</li>
+          <li id="a3"><b>Suspicious link</b> — the visible text says "PayPal" but the actual domain (verify-account.info) has nothing to do with PayPal.</li>
+          <li id="a4"><b>Spelling/grammar slip</b> — "Security Teem" — legitimate companies proofread their official emails.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- EXHIBIT B -->
+    <div class="evidence" id="ex-b">
+      <div class="evidence-tab"><span>Exhibit B — CEO Wire Request</span><span>PHISHING (Spear / BEC)</span></div>
+      <div class="email-body">
+        <div class="email-row"><span class="label">From</span><span class="value flagged" data-note="b1">J. Whitfield &lt;j.whitfield@corp-outlook.net&gt;</span></div>
+        <div class="email-row"><span class="label">To</span><span class="value">you@yourcompany.com</span></div>
+        <div class="email-row"><span class="label">Subject</span><span class="value">Quick favor</span></div>
+        <div class="email-message">
+          Hi,<br><br>
+          <span class="flagged" data-note="b2">I'm in back-to-back board meetings and can't talk right now.</span> I need you to process an urgent wire transfer for a vendor before end of day — <span class="flagged" data-note="b3">don't mention this to anyone else on the finance team yet</span>, I'll explain later.<br><br>
+          Reply with your direct cell so I can send the details.<br><br>
+          Thanks,<br>James (sent from my iPhone)
+        </div>
+      </div>
+      <button class="reveal-btn" onclick="toggleEvidence('ex-b')">Reveal evidence</button>
+      <div class="annotations">
+        <ul>
+          <li id="b1"><b>Authority impersonation + lookalike domain</b> — claims to be an executive but uses a personal/external domain, not the real company domain.</li>
+          <li id="b2"><b>Unverifiable unavailability</b> — "can't talk right now" pre-empts the one thing that would expose the scam: a phone call to confirm.</li>
+          <li id="b3"><b>Isolation tactic</b> — asking you to bypass normal approval channels and stay quiet is a major red flag for Business Email Compromise (BEC).</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- EXHIBIT C -->
+    <div class="evidence" id="ex-c">
+      <div class="evidence-tab"><span>Exhibit C — Prize Notification</span><span>PHISHING</span></div>
+      <div class="email-body">
+        <div class="email-row"><span class="label">From</span><span class="value flagged" data-note="c1">rewards@amazon-giftcenter.com</span></div>
+        <div class="email-row"><span class="label">To</span><span class="value">you@yourcompany.com</span></div>
+        <div class="email-row"><span class="label">Subject</span><span class="value flagged" data-note="c2">🎉 You've been selected for a $500 gift card!</span></div>
+        <div class="email-message">
+          Congratulations!<br><br>
+          Your email was randomly selected to receive a <span class="flagged" data-note="c2">$500 Amazon gift card — claim within 3 hours</span> before this offer expires.<br><br>
+          To claim, simply <span class="flagged" data-note="c3">confirm your identity by entering your full name, date of birth, and card details</span> on our secure claim page.<br><br>
+          <span class="flagged" data-note="c1">www.amazon-giftcenter.com/claim</span>
+        </div>
+      </div>
+      <button class="reveal-btn" onclick="toggleEvidence('ex-c')">Reveal evidence</button>
+      <div class="annotations">
+        <ul>
+          <li id="c1"><b>Unofficial domain</b> — Amazon never sends prize claims from third-party domains like "amazon-giftcenter.com".</li>
+          <li id="c2"><b>Reward + scarcity combo</b> — "randomly selected" plus a ticking clock is a classic combination to override skepticism.</li>
+          <li id="c3"><b>Data harvesting request</b> — no legitimate giveaway needs your card details or date of birth to "verify identity".</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- EXHIBIT D -->
+    <div class="evidence" id="ex-d">
+      <div class="evidence-tab"><span>Exhibit D — IT Password Reset</span><span>LEGITIMATE (control sample)</span></div>
+      <div class="email-body">
+        <div class="email-row"><span class="label">From</span><span class="value">it-helpdesk@yourcompany.com</span></div>
+        <div class="email-row"><span class="label">To</span><span class="value">you@yourcompany.com</span></div>
+        <div class="email-row"><span class="label">Subject</span><span class="value">Scheduled password rotation — action needed by Friday</span></div>
+        <div class="email-message">
+          Hi,<br><br>
+          As part of our quarterly security policy, your password is due to expire on Friday. Please update it any time before then via the company SSO portal (the same login page you use every day — no link provided here).<br><br>
+          If you have questions, open a ticket through the IT Helpdesk portal or call ext. 204.<br><br>
+          — IT Helpdesk
+        </div>
+      </div>
+      <button class="reveal-btn" onclick="toggleEvidence('ex-d')">Reveal evidence</button>
+      <div class="annotations">
+        <ul>
+          <li><b>Internal domain match</b> — sender matches the real company domain exactly.</li>
+          <li><b>No embedded link or attachment</b> — directs you to the known portal you already use, instead of a new "verification" link.</li>
+          <li><b>Reasonable timeframe + an alternate verification path</b> (ticket/phone extension) — no artificial urgency, and a way to confirm independently.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= FIELD MANUAL ================= -->
+<section id="manual">
+  <div class="section-label stamp">03 · Field Manual</div>
+  <h2>Five habits that stop most phishing cold</h2>
+  <p class="section-intro">You don't need to be a security expert — you need a short list of reflexes.</p>
+  <div class="manual">
+    <div class="manual-item"><span class="num">01</span><p><strong>Check the actual domain</strong>Hover over links and sender addresses — read the part right before ".com", not just the display name.</p></div>
+    <div class="manual-item"><span class="num">02</span><p><strong>Slow down on urgency</strong>Deadlines under 24 hours, threats of suspension, or "don't tell anyone" requests are a deliberate pressure tactic.</p></div>
+    <div class="manual-item"><span class="num">03</span><p><strong>Verify out-of-band</strong>For money, credentials, or policy-bending requests, confirm via a separate channel — call the person, don't reply to the email.</p></div>
+    <div class="manual-item"><span class="num">04</span><p><strong>Never enter credentials from a link</strong>Navigate to the site yourself by typing the known URL instead of clicking through an email.</p></div>
+    <div class="manual-item"><span class="num">05</span><p><strong>Report, don't just delete</strong>Forward suspicious emails to your security team — one report can protect the rest of the company.</p></div>
+  </div>
+</section>
+
+<!-- ================= QUIZ ================= -->
+<section id="quiz-section">
+  <div class="section-label stamp">04 · Field Test</div>
+  <h2>Cleared for duty?</h2>
+  <p class="section-intro">Five scenario questions. Answer honestly — your score isn't shared anywhere, it's just for you.</p>
+
+  <div class="quiz-card">
+    <div id="quiz-progress"><div id="quiz-progress-bar"></div></div>
+    <div class="quiz-body" id="quiz-body"></div>
+  </div>
+</section>
+
+<footer>
+  CodeAlpha Cyber Security Internship — Task 2: Phishing Awareness Training · Built for educational use only.<br>
+  Spotted a phishing email at work? Report it to your IT/security team immediately — don't click, don't reply, don't forward to coworkers.
+</footer>
+
+<script>
+function toggleEvidence(id){
+  document.getElementById(id).classList.toggle('revealed');
+}
+
+const questions = [
+  {
+    q: "An email from \"hr-payroll@yourcompany-update.com\" asks you to confirm your bank details for a salary adjustment within 2 hours. What's the strongest red flag?",
+    options: [
+      "The email mentions payroll",
+      "The domain isn't your real company domain, paired with a tight deadline",
+      "It was sent in the morning",
+      "It uses your real name"
+    ],
+    correct: 1,
+    feedback: "A near-identical but altered domain combined with urgency is one of the most common phishing patterns — always check the exact domain character by character."
+  },
+  {
+    q: "You get a text claiming to be your bank, with a link to 'verify a suspicious login.' What should you do first?",
+    options: [
+      "Click the link to see what it says",
+      "Reply STOP to unsubscribe",
+      "Open your banking app directly (not via the link) or call the number on your card",
+      "Forward it to a friend to ask their opinion"
+    ],
+    correct: 2,
+    feedback: "Always verify through a channel you already trust — the official app or the number on your card — never through a link or number provided in the suspicious message itself."
+  },
+  {
+    q: "Which of these is NOT a typical social-engineering lever used in phishing?",
+    options: [
+      "Urgency / tight deadlines",
+      "Impersonating authority figures",
+      "Slow, no-pressure, multi-week conversations with no requests",
+      "Promising rewards or refunds"
+    ],
+    correct: 2,
+    feedback: "Phishing almost always relies on some form of pressure or incentive — urgency, authority, or reward. A slow, request-free conversation isn't a typical phishing pattern (though it can be used in longer-term social engineering / pretexting)."
+  },
+  {
+    q: "Your 'CEO' emails from a personal Gmail address asking you to buy gift cards urgently and keep it confidential. Best response?",
+    options: [
+      "Buy the gift cards quickly since it's the CEO",
+      "Reply asking for more details over email",
+      "Verify directly with the CEO via phone or in person before doing anything",
+      "Forward the email to other employees to check if they got it too"
+    ],
+    correct: 2,
+    feedback: "Requests for secrecy plus unusual payment methods (gift cards, wire transfers) from a non-corporate email address are a classic Business Email Compromise (BEC) scam — always verify out-of-band."
+  },
+  {
+    q: "What's the safest way to check if a link in an email is legitimate before clicking?",
+    options: [
+      "Click it — most antivirus software will catch anything bad",
+      "Hover over it (or long-press on mobile) to preview the actual URL first",
+      "Check if the email has the company logo",
+      "Check how many other people received the same email"
+    ],
+    correct: 1,
+    feedback: "Hovering reveals the real destination URL — logos are trivial to copy, and antivirus software doesn't catch every phishing link."
+  }
+];
+
+let current = 0;
+let score = 0;
+const body = document.getElementById('quiz-body');
+const bar = document.getElementById('quiz-progress-bar');
+
+function renderQuestion(){
+  bar.style.width = ((current)/questions.length*100) + '%';
+  if(current >= questions.length){
+    renderResult();
+    return;
+  }
+  const item = questions[current];
+  body.innerHTML = `
+    <div class="quiz-q-label">Question ${current+1} of ${questions.length}</div>
+    <div class="quiz-question">${item.q}</div>
+    <div class="quiz-options">
+      ${item.options.map((opt,i)=>`<button class="quiz-opt" data-i="${i}">${opt}</button>`).join('')}
+    </div>
+    <div class="quiz-feedback" id="quiz-feedback"></div>
+    <button class="quiz-next" id="quiz-next">Next →</button>
+  `;
+  const optButtons = body.querySelectorAll('.quiz-opt');
+  optButtons.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if(btn.disabled) return;
+      optButtons.forEach(b=>b.disabled=true);
+      const idx = parseInt(btn.dataset.i);
+      const fb = document.getElementById('quiz-feedback');
+      if(idx === item.correct){
+        btn.classList.add('correct');
+        score++;
+        fb.innerHTML = "<b>Correct.</b> " + item.feedback;
+      } else {
+        btn.classList.add('incorrect');
+        optButtons[item.correct].classList.add('correct');
+        fb.innerHTML = "<b>Not quite.</b> " + item.feedback;
+      }
+      fb.classList.add('show');
+      document.getElementById('quiz-next').classList.add('show');
+    });
+  });
+  document.getElementById('quiz-next').addEventListener('click', ()=>{
+    current++;
+    renderQuestion();
+  });
+}
+
+function renderResult(){
+  bar.style.width = '100%';
+  const pct = Math.round(score/questions.length*100);
+  const pass = pct >= 60;
+  body.innerHTML = `
+    <div class="quiz-result show">
+      <div class="quiz-q-label">Field Test Complete</div>
+      <div class="score">${score} / ${questions.length}</div>
+      <div class="verdict ${pass?'pass':'fail'}">${pass ? 'Cleared for duty' : 'Recommend retraining'}</div>
+      <p style="color:#3A3D42; max-width:480px; margin:0 auto;">
+        ${pass
+          ? "Solid instincts. Keep verifying senders and links before you act — attackers count on the one time you don't."
+          : "Review the Field Manual and Evidence sections again — a few more reps and these patterns become automatic."}
+      </p>
+      <button class="restart-btn" onclick="restartQuiz()">Retake the test</button>
+    </div>
+  `;
+}
+
+function restartQuiz(){
+  current = 0;
+  score = 0;
+  renderQuestion();
+}
+
+renderQuestion();
+</script>
+
+</body>
+</html>
